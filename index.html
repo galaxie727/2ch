@@ -409,16 +409,15 @@ body{
   margin-top:16px;
 }
 
-/* カットイン */
+/* カットイン：ここを強化 */
 .cutIn{
   position:fixed;
   inset:0;
   z-index:50;
-  background:rgba(0,0,0,.96);
+  background:rgba(0,0,0,.985);
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:20px;
   opacity:0;
   pointer-events:none;
   transition:opacity .18s ease;
@@ -428,32 +427,47 @@ body{
   pointer-events:auto;
 }
 .cutInInner{
-  width:min(100%, 540px);
-  height:min(86svh, 760px);
   position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  width:100vw;
+  height:100dvh;
+  overflow:hidden;
+  background:#000;
 }
 .cutInImg{
+  position:absolute;
+  inset:0;
   width:100%;
   height:100%;
-  object-fit:contain;
-  border-radius:8px;
-  box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 20px 80px rgba(0,0,0,.6);
-  animation:cutInPop .22s ease;
-  background:#111;
+  object-fit:cover;           /* 画面いっぱい */
+  object-position:center center;
+  opacity:0;
+  transform:scale(1.10);
+  transition:
+    opacity .35s ease,
+    transform 4.8s ease,
+    filter .12s ease;
+  filter:brightness(.82) contrast(1.08) saturate(1.04);
+  background:#000;
 }
-@keyframes cutInPop{
-  from{ transform:scale(1.05); opacity:.4; }
-  to{ transform:scale(1); opacity:1; }
+.cutIn.show .cutInImg{
+  opacity:1;
+  transform:scale(1);
 }
 .cutInCaption{
   position:absolute;
-  left:0; right:0; bottom:-6px;
+  left:0; right:0; bottom:18px;
   text-align:center;
-  font-size:12px;
-  color:rgba(255,255,255,.72);
+  font-size:13px;
+  color:rgba(255,255,255,.74);
+  text-shadow:0 2px 10px rgba(0,0,0,.6);
+  letter-spacing:.04em;
+}
+.cutInVignette{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at center, transparent 42%, rgba(0,0,0,.18) 68%, rgba(0,0,0,.52) 100%);
 }
 
 .flash{
@@ -555,6 +569,7 @@ body{
 <div id="cutIn" class="cutIn" hidden>
   <div class="cutInInner">
     <img id="cutInImg" class="cutInImg" src="horror_art.png" alt="不気味な絵">
+    <div class="cutInVignette"></div>
     <div class="cutInCaption">タップで戻る</div>
   </div>
 </div>
@@ -584,6 +599,7 @@ const endTitle = document.getElementById('endTitle');
 const endText = document.getElementById('endText');
 
 const cutIn = document.getElementById('cutIn');
+const cutInImg = document.getElementById('cutInImg');
 
 let step = 0;
 let choice1 = null;
@@ -591,6 +607,9 @@ let choice2 = null;
 let choice3 = null;
 let ended = false;
 let audioCtx = null;
+let cutSwapTimer1 = null;
+let cutSwapTimer2 = null;
+let cutSwapTimer3 = null;
 
 function initAudio(){
   if(!audioCtx){
@@ -701,7 +720,8 @@ function showHow(){
 
 必要画像
 ・girl.png
-・horror_art.png`
+・horror_art.png
+・horror_art_alt.png（差分用・なくても可）`
   );
 }
 
@@ -727,19 +747,55 @@ function showEnding(title, body){
   setScreen('result');
 }
 
+function clearCutTimers(){
+  if(cutSwapTimer1) clearTimeout(cutSwapTimer1);
+  if(cutSwapTimer2) clearTimeout(cutSwapTimer2);
+  if(cutSwapTimer3) clearTimeout(cutSwapTimer3);
+  cutSwapTimer1 = null;
+  cutSwapTimer2 = null;
+  cutSwapTimer3 = null;
+}
+
 function showCutIn(afterCallback){
   initAudio();
   horrorSe();
   appRoot.classList.add('flash');
   setTimeout(()=>appRoot.classList.remove('flash'), 180);
 
+  clearCutTimers();
+
+  cutInImg.src = 'horror_art.png';
+  cutInImg.style.filter = 'brightness(.82) contrast(1.08) saturate(1.04)';
   cutIn.hidden = false;
-  requestAnimationFrame(()=>cutIn.classList.add('show'));
+
+  requestAnimationFrame(()=>{
+    cutIn.classList.add('show');
+  });
+
+  /* 一瞬だけ差分を入れる */
+  cutSwapTimer1 = setTimeout(()=>{
+    cutInImg.src = 'horror_art_alt.png';
+    cutInImg.style.filter = 'brightness(.78) contrast(1.16) saturate(1.08)';
+  }, 120);
+
+  cutSwapTimer2 = setTimeout(()=>{
+    cutInImg.src = 'horror_art.png';
+    cutInImg.style.filter = 'brightness(.82) contrast(1.08) saturate(1.04)';
+  }, 220);
+
+  /* もう一度軽く差分 */
+  cutSwapTimer3 = setTimeout(()=>{
+    cutInImg.src = 'horror_art_alt.png';
+    cutInImg.style.filter = 'brightness(.76) contrast(1.2) saturate(1.1)';
+  }, 520);
 
   const close = ()=>{
+    clearCutTimers();
     cutIn.classList.remove('show');
     setTimeout(()=>{
       cutIn.hidden = true;
+      cutInImg.src = 'horror_art.png';
+      cutInImg.style.filter = 'brightness(.82) contrast(1.08) saturate(1.04)';
       cutIn.removeEventListener('click', close);
       if(afterCallback) afterCallback();
     }, 180);
@@ -977,3 +1033,8 @@ setScreen('top');
 </script>
 </body>
 </html>
+
+見てみたけどフルスクリーンにならないし
+差分の顔が出ないよ
+コード修正おね
+ChatGPT said:
