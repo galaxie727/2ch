@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>チー娘スレ劇場 - ポストに、知らない手紙が入ってた</title>
+<title>チー娘スレ劇場</title>
 <style>
 *{box-sizing:border-box}
 html,body{
@@ -15,7 +15,7 @@ html,body{
   -webkit-tap-highlight-color:transparent;
 }
 button,input,textarea,select{font:inherit}
-[hidden]{display:none !important}
+[hidden]{display:none!important}
 
 :root{
   --maxw:430px;
@@ -50,7 +50,8 @@ body{
   pointer-events:none;
   overflow:hidden;
 }
-.bg::before,.bg::after{
+.bg::before,
+.bg::after{
   content:"";
   position:absolute;
   border-radius:50%;
@@ -129,8 +130,8 @@ body{
   animation:floaty 5.8s ease-in-out infinite alternate;
 }
 @keyframes floaty{
-  from{ transform:translateY(0) scale(1); }
-  to{ transform:translateY(-6px) scale(1.015); }
+  from{transform:translateY(0) scale(1)}
+  to{transform:translateY(-6px) scale(1.015)}
 }
 .topCard{
   margin-top:14px;
@@ -168,6 +169,60 @@ body{
   color:#fff;
   border:1px solid var(--stroke);
   box-shadow:none;
+}
+
+/* エピソード選択 */
+.select{
+  min-height:100svh;
+  padding:env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 16px);
+}
+.selectHeader{
+  padding-top:10px;
+}
+.selectTitle{
+  font-size:28px;
+  line-height:1.3;
+  font-weight:800;
+}
+.selectSub{
+  margin-top:8px;
+  font-size:13px;
+  color:var(--text2);
+  line-height:1.7;
+}
+.epList{
+  margin-top:18px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.epCard{
+  background:var(--panel);
+  border:1px solid var(--stroke);
+  border-radius:22px;
+  padding:16px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(10px);
+}
+.epKicker{
+  font-size:11px;
+  letter-spacing:.14em;
+  color:var(--text2);
+}
+.epTitle{
+  margin-top:6px;
+  font-size:22px;
+  line-height:1.35;
+  font-weight:800;
+}
+.epDesc{
+  margin-top:8px;
+  font-size:13px;
+  line-height:1.75;
+  color:#f1eef9;
+}
+.epBtn{
+  margin-top:12px;
 }
 
 /* プレイ */
@@ -263,6 +318,41 @@ body{
   border-radius:10px;
   opacity:.75;
 }
+.wallFx{
+  position:absolute;
+  right:16px;
+  top:18px;
+  width:72px;
+  height:72px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.15);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02)),
+    linear-gradient(180deg, #474b5f 0%, #2a2d39 100%);
+  box-shadow:0 10px 24px rgba(0,0,0,.28);
+  opacity:.94;
+}
+.wallFx::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:18px;height:16px;
+  background:repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,.18) 0 1px,
+    transparent 1px 10px
+  );
+  opacity:.65;
+}
+.wallFx::after{
+  content:"";
+  position:absolute;
+  top:10px;left:22px;
+  width:26px;height:42px;
+  border-radius:14px 14px 10px 10px;
+  background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.05));
+  filter:blur(.3px);
+  opacity:.55;
+}
 
 .uiZone{
   padding:0 12px calc(env(safe-area-inset-bottom) + 12px);
@@ -342,7 +432,7 @@ body{
   color:var(--text2);
 }
 
-/* 結果 */
+/* 終了 */
 .result{
   min-height:100svh;
   display:flex;
@@ -426,7 +516,7 @@ body{
 }
 @keyframes cutZoom{
   from{ transform:scale(1.16); }
-  to{ transform:scale(1.00); }
+  to{ transform:scale(1); }
 }
 .cutInCaption{
   position:absolute;
@@ -457,7 +547,7 @@ body{
 }
 
 @media (max-width:380px){
-  .title{font-size:28px}
+  .title,.selectTitle{font-size:28px}
   .text{font-size:17px;min-height:116px}
 }
 </style>
@@ -466,13 +556,14 @@ body{
 <div class="app" id="appRoot">
   <div class="bg"></div>
 
+  <!-- タイトル -->
   <section id="screenTop" class="screen top">
     <div class="topHeader">
       <div class="kicker">CHI-MUSUME THREAD STORY</div>
-      <div class="title">ポストに、<br>知らない手紙が入ってた</div>
+      <div class="title">チー娘スレ劇場</div>
       <div class="subtitle">
         チー娘が語る、短編スレ劇場。<br>
-        今日は少しだけ、不気味な話。
+        1話完結の不気味な話を選んで遊べます。
       </div>
     </div>
 
@@ -483,20 +574,59 @@ body{
 
     <div class="topCard">
       <div class="topStory">
-        今日、ポストの中に見覚えのない手紙が入っていた。<br>
-        宛名も切手もない。ただ、誰かが直接入れたみたいで――。
+        怖い話、違和感のある話、少しだけ妙な話。<br>
+        1話ずつ短く遊べるエピソード集です。
       </div>
       <div class="topButtons">
-        <button class="btn" id="startBtn">はじめる</button>
+        <button class="btn" id="startBtn">エピソード選択へ</button>
         <button class="btn btnSub" id="howBtn">あそびかた</button>
       </div>
     </div>
   </section>
 
+  <!-- エピソード選択 -->
+  <section id="screenSelect" class="screen select" hidden>
+    <div class="selectHeader">
+      <div class="kicker">EPISODE SELECT</div>
+      <div class="selectTitle">エピソードを選ぶ</div>
+      <div class="selectSub">
+        1話完結です。<br>
+        気になる話から読めます。
+      </div>
+    </div>
+
+    <div class="epList">
+      <div class="epCard">
+        <div class="epKicker">EPISODE 01</div>
+        <div class="epTitle">ポストに、<br>知らない手紙が入ってた</div>
+        <div class="epDesc">
+          宛名も切手もない手紙。<br>
+          読み進めるほど、少しずつおかしい。
+        </div>
+        <button class="btn epBtn" data-episode="post">この話を読む</button>
+      </div>
+
+      <div class="epCard">
+        <div class="epKicker">EPISODE 02</div>
+        <div class="epTitle">塀の上の、あれ</div>
+        <div class="epDesc">
+          裏道の塀の上にいた、妙に高い“何か”。<br>
+          夜になると、声だけが来る。
+        </div>
+        <button class="btn epBtn" data-episode="wall">この話を読む</button>
+      </div>
+    </div>
+
+    <div style="margin-top:14px">
+      <button class="btn btnSub" id="selectBackBtn">タイトルへ戻る</button>
+    </div>
+  </section>
+
+  <!-- プレイ -->
   <section id="screenPlay" class="screen play" hidden>
     <div class="statusBar">
-      <button class="smallBtn" id="backTitleBtn">タイトル</button>
-      <div class="storyLabel">チー娘スレ劇場</div>
+      <button class="smallBtn" id="backSelectBtn">選択へ</button>
+      <div class="storyLabel" id="storyLabel">チー娘スレ劇場</div>
       <button class="smallBtn" id="resetBtn">最初から</button>
     </div>
 
@@ -504,7 +634,7 @@ body{
       <div class="charArea">
         <div class="charAura"></div>
         <div id="char" class="char normal"></div>
-        <div class="letterFx"></div>
+        <div id="sceneFx" class="letterFx"></div>
       </div>
 
       <div class="uiZone">
@@ -524,6 +654,7 @@ body{
     </div>
   </section>
 
+  <!-- 結果 -->
   <section id="screenResult" class="screen result" hidden>
     <div class="resultCard">
       <div class="endLabel">ENDING</div>
@@ -532,7 +663,7 @@ body{
 
       <div class="resultButtons">
         <button id="playAgainBtn" class="btn">もう一度見る</button>
-        <button id="toTitleBtn" class="btn btnSub">タイトルへ</button>
+        <button id="toSelectBtn" class="btn btnSub">エピソード選択へ</button>
       </div>
     </div>
   </section>
@@ -548,15 +679,17 @@ body{
 
 <script>
 const screenTop = document.getElementById('screenTop');
+const screenSelect = document.getElementById('screenSelect');
 const screenPlay = document.getElementById('screenPlay');
 const screenResult = document.getElementById('screenResult');
 
 const startBtn = document.getElementById('startBtn');
 const howBtn = document.getElementById('howBtn');
-const backTitleBtn = document.getElementById('backTitleBtn');
+const selectBackBtn = document.getElementById('selectBackBtn');
+const backSelectBtn = document.getElementById('backSelectBtn');
 const resetBtn = document.getElementById('resetBtn');
 const playAgainBtn = document.getElementById('playAgainBtn');
-const toTitleBtn = document.getElementById('toTitleBtn');
+const toSelectBtn = document.getElementById('toSelectBtn');
 
 const textEl = document.getElementById('text');
 const choicesEl = document.getElementById('choices');
@@ -566,6 +699,8 @@ const hint = document.getElementById('hint');
 const charEl = document.getElementById('char');
 const speakerName = document.getElementById('speakerName');
 const appRoot = document.getElementById('appRoot');
+const storyLabel = document.getElementById('storyLabel');
+const sceneFx = document.getElementById('sceneFx');
 
 const endTitle = document.getElementById('endTitle');
 const endText = document.getElementById('endText');
@@ -573,22 +708,27 @@ const endText = document.getElementById('endText');
 const cutIn = document.getElementById('cutIn');
 const cutInImg = document.getElementById('cutInImg');
 
+let currentEpisode = null;
 let step = 0;
+let ended = false;
 let choice1 = null;
 let choice2 = null;
 let choice3 = null;
 let choice4 = null;
-let ended = false;
 let audioCtx = null;
 let cutSwapTimer1 = null;
 let cutSwapTimer2 = null;
 let cutSwapTimer3 = null;
-let altLoaded = false;
 
 const preloadAlt = new Image();
-preloadAlt.onload = ()=>{ altLoaded = true; };
-preloadAlt.onerror = ()=>{ altLoaded = false; };
 preloadAlt.src = 'horror_art_alt.png';
+let altLoaded = false;
+preloadAlt.onload = ()=>{ altLoaded = true; };
+
+const preloadWall = new Image();
+preloadWall.src = 'wall_art.png';
+let wallLoaded = false;
+preloadWall.onload = ()=>{ wallLoaded = true; };
 
 function initAudio(){
   if(!audioCtx){
@@ -611,7 +751,6 @@ function tone(freq=540, duration=0.03, type='triangle', volume=0.018){
   osc.start(now);
   osc.stop(now + duration);
 }
-
 function pageSe(){ tone(560, 0.03, 'triangle', 0.018); }
 function choiceSe(){ tone(620, 0.05, 'triangle', 0.025); }
 
@@ -648,12 +787,17 @@ function horrorSe(){
 
 function setScreen(name){
   screenTop.hidden = name !== 'top';
+  screenSelect.hidden = name !== 'select';
   screenPlay.hidden = name !== 'play';
   screenResult.hidden = name !== 'result';
 }
 
 function setMood(mood){
   charEl.className = 'char ' + mood;
+}
+
+function setSceneFx(type){
+  sceneFx.className = type === 'wall' ? 'wallFx' : 'letterFx';
 }
 
 function setText(name, text, mood='normal'){
@@ -686,31 +830,45 @@ function setChoices(arr){
 function showHow(){
   alert(`あそびかた
 
+・タイトルからエピソードを選びます
 ・「次へ」で読み進めます
 ・途中で選択肢が出ます
-・選んだ内容で結末が変わります
-・「絵を見る」を選ぶと全画面演出が入ります
+・一部の話では全画面演出が入ります
 
 必要画像
 ・girl.png
 ・horror_art.png
-・horror_art_alt.png（差分用・なくても可）`);
+・horror_art_alt.png（なくても可）
+・wall_art.png（なくても可）`);
 }
 
-function resetStory(){
-  initAudio();
-  step = 0;
+function clearChoices(){
   choice1 = null;
   choice2 = null;
   choice3 = null;
   choice4 = null;
+}
+
+function openEpisode(id){
+  initAudio();
+  currentEpisode = id;
+  step = 0;
   ended = false;
+  clearChoices();
+  storyLabel.textContent = id === 'post' ? 'ポストに、知らない手紙が入ってた' : '塀の上の、あれ';
+  setSceneFx(id === 'post' ? 'letter' : 'wall');
   setScreen('play');
   render();
 }
 
-function goTitle(){
-  setScreen('top');
+function resetStory(){
+  if(!currentEpisode) return;
+  initAudio();
+  step = 0;
+  ended = false;
+  clearChoices();
+  setScreen('play');
+  render();
 }
 
 function showEnding(title, body){
@@ -724,17 +882,10 @@ function clearCutTimers(){
   if(cutSwapTimer1) clearTimeout(cutSwapTimer1);
   if(cutSwapTimer2) clearTimeout(cutSwapTimer2);
   if(cutSwapTimer3) clearTimeout(cutSwapTimer3);
-  cutSwapTimer1 = null;
-  cutSwapTimer2 = null;
-  cutSwapTimer3 = null;
+  cutSwapTimer1 = cutSwapTimer2 = cutSwapTimer3 = null;
 }
 
-function safeSwapToAlt(){
-  if(!altLoaded) return;
-  cutInImg.src = 'horror_art_alt.png';
-}
-
-function showCutIn(afterCallback){
+function showCutIn(kind='post', afterCallback){
   initAudio();
   horrorSe();
   appRoot.classList.add('flash');
@@ -742,7 +893,12 @@ function showCutIn(afterCallback){
 
   clearCutTimers();
 
-  cutInImg.src = 'horror_art.png';
+  if(kind === 'wall'){
+    cutInImg.src = wallLoaded ? 'wall_art.png' : 'horror_art.png';
+  } else {
+    cutInImg.src = 'horror_art.png';
+  }
+
   cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
   cutIn.hidden = false;
 
@@ -750,28 +906,28 @@ function showCutIn(afterCallback){
     cutIn.classList.add('show');
   });
 
-  cutSwapTimer1 = setTimeout(()=>{
-    safeSwapToAlt();
-    cutInImg.style.filter = 'brightness(.76) contrast(1.18) saturate(1.08)';
-  }, 160);
+  if(kind === 'post' && altLoaded){
+    cutSwapTimer1 = setTimeout(()=>{
+      cutInImg.src = 'horror_art_alt.png';
+      cutInImg.style.filter = 'brightness(.76) contrast(1.18) saturate(1.08)';
+    }, 160);
 
-  cutSwapTimer2 = setTimeout(()=>{
-    cutInImg.src = 'horror_art.png';
-    cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
-  }, 320);
+    cutSwapTimer2 = setTimeout(()=>{
+      cutInImg.src = 'horror_art.png';
+      cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
+    }, 320);
 
-  cutSwapTimer3 = setTimeout(()=>{
-    safeSwapToAlt();
-    cutInImg.style.filter = 'brightness(.74) contrast(1.22) saturate(1.1)';
-  }, 620);
+    cutSwapTimer3 = setTimeout(()=>{
+      cutInImg.src = 'horror_art_alt.png';
+      cutInImg.style.filter = 'brightness(.74) contrast(1.22) saturate(1.1)';
+    }, 620);
+  }
 
   const close = ()=>{
     clearCutTimers();
     cutIn.classList.remove('show');
     setTimeout(()=>{
       cutIn.hidden = true;
-      cutInImg.src = 'horror_art.png';
-      cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
       cutIn.removeEventListener('click', close);
       if(afterCallback) afterCallback();
     }, 180);
@@ -780,269 +936,225 @@ function showCutIn(afterCallback){
   cutIn.addEventListener('click', close, { once:true });
 }
 
-function render(){
-  if(ended) return;
-
+/* --------- エピソード1: ポスト --------- */
+function renderPost(){
   switch(step){
-
-    case 0:
-      setText('チー娘', 'ねえ…今日さ、変なもの入ってたの', 'worried');
-      break;
-
-    case 1:
-      setText('チー娘', '帰ってきて、いつもみたいにポスト開けたの。', 'worried');
-      break;
-
-    case 2:
-      setText('チー娘', 'そしたらね。\n郵便はそれだけだった。', 'serious');
-      break;
-
-    case 3:
-      setText('チー娘', '手紙。', 'serious');
-      break;
-
-    case 4:
-      setText('チー娘', 'でもね。\n宛名、なかったの', 'serious');
-      break;
-
-    case 5:
-      setText('チー娘', '切手もないし、誰かが直接入れたっぽい', 'worried');
-      break;
-
-    case 6:
-      setText('チー娘', 'しかもさ。\n入ってたの、夜だったんだよね', 'serious');
-      break;
-
-    case 7:
-      setText('チー娘', 'その日は雨も降ってないし、\n配達が来る時間でもなかったの', 'worried');
-      break;
-
-    case 8:
-      setText('チー娘', 'なのに、封筒だけ少し湿ってた。', 'serious');
-      break;
-
+    case 0: setText('チー娘','ねえ…今日さ、変なもの入ってたの','worried'); break;
+    case 1: setText('チー娘','帰ってきて、いつもみたいにポスト開けたの。','worried'); break;
+    case 2: setText('チー娘','そしたらね。\n郵便はそれだけだった。','serious'); break;
+    case 3: setText('チー娘','手紙。','serious'); break;
+    case 4: setText('チー娘','でもね。\n宛名、なかったの','serious'); break;
+    case 5: setText('チー娘','切手もないし、誰かが直接入れたっぽい','worried'); break;
+    case 6: setText('チー娘','しかもさ。\n入ってたの、夜だったんだよね','serious'); break;
+    case 7: setText('チー娘','その日は雨も降ってないし、\n配達が来る時間でもなかったの','worried'); break;
+    case 8: setText('チー娘','なのに、封筒だけ少し湿ってた。','serious'); break;
     case 9:
       setChoices([
-        { label:'見せて', onClick:()=>{ choice1='show'; step=10; render(); } },
-        { label:'やめとけ', onClick:()=>{ choice1='stop'; step=10; render(); } },
-        { label:'それ怖くない？', onClick:()=>{ choice1='scary'; step=10; render(); } },
+        {label:'見せて', onClick:()=>{choice1='show'; step=10; render();}},
+        {label:'やめとけ', onClick:()=>{choice1='stop'; step=10; render();}},
+        {label:'それ怖くない？', onClick:()=>{choice1='scary'; step=10; render();}},
       ]);
       break;
-
     case 10:
-      if(choice1 === 'show'){
-        setText('チー娘', 'うん…いいけど', 'worried');
-      }else if(choice1 === 'stop'){
-        setText('チー娘', 'もう見ちゃった', 'serious');
-      }else{
-        setText('チー娘', '最初は思わなかった。\nでも今はちょっと怖い', 'worried');
-      }
+      if(choice1 === 'show') setText('チー娘','うん…いいけど','worried');
+      else if(choice1 === 'stop') setText('チー娘','もう見ちゃった','serious');
+      else setText('チー娘','最初は思わなかった。\nでも今はちょっと怖い','worried');
       break;
-
-    case 11:
-      setText('チー娘', '開けたら文章が入ってた。', 'serious');
-      break;
-
-    case 12:
-      setText('チー娘', '途中で同じ言葉が何回も繰り返されてるの', 'serious');
-      break;
-
-    case 13:
-      setText('チー娘', '意味もよく分からなくて。\n怒ってる感じだけは分かる', 'serious');
-      break;
-
-    case 14:
-      setText('チー娘', 'しかも、途中から字の大きさが変わってて…\n後ろにいくほど、だんだん乱れてる', 'worried');
-      break;
-
+    case 11: setText('チー娘','開けたら文章が入ってた。','serious'); break;
+    case 12: setText('チー娘','途中で同じ言葉が何回も繰り返されてるの','serious'); break;
+    case 13: setText('チー娘','意味もよく分からなくて。\n怒ってる感じだけは分かる','serious'); break;
+    case 14: setText('チー娘','しかも、途中から字の大きさが変わってて…\n後ろにいくほど、だんだん乱れてる','worried'); break;
     case 15:
       setChoices([
-        { label:'文章を読む', onClick:()=>{ choice4='read'; step=16; render(); } },
-        { label:'裏返してみる', onClick:()=>{ choice4='turn'; step=16; render(); } },
-        { label:'もう閉じる', onClick:()=>{ choice4='close'; step=16; render(); } },
+        {label:'文章を読む', onClick:()=>{choice4='read'; step=16; render();}},
+        {label:'裏返してみる', onClick:()=>{choice4='turn'; step=16; render();}},
+        {label:'もう閉じる', onClick:()=>{choice4='close'; step=16; render();}},
       ]);
       break;
-
     case 16:
-      if(choice4 === 'read'){
-        setText('チー娘', '最後の方だけ、インクが潰れてて読めなかった。', 'serious');
-      }else if(choice4 === 'turn'){
-        setText('チー娘', '裏返したら、紙の裏に赤い染みがにじんでた。', 'serious');
-      }else{
-        setText('チー娘', '閉じようとした時に、紙の裏に何か見えたの。', 'worried');
-      }
+      if(choice4 === 'read') setText('チー娘','最後の方だけ、インクが潰れてて読めなかった。','serious');
+      else if(choice4 === 'turn') setText('チー娘','裏返したら、紙の裏に赤い染みがにじんでた。','serious');
+      else setText('チー娘','閉じようとした時に、紙の裏に何か見えたの。','worried');
       break;
-
-    case 17:
-      setText('チー娘', 'あとね。\n紙に絵が描いてあったの', 'worried');
-      break;
-
+    case 17: setText('チー娘','あとね。\n紙に絵が描いてあったの','worried'); break;
     case 18:
       setChoices([
-        {
-          label:'絵を見る',
-          onClick:()=>{
-            showCutIn(()=>{
-              step = 19;
-              render();
-            });
-          }
-        },
-        {
-          label:'見ない方がいい',
-          onClick:()=>{
-            step = 19;
-            render();
-          }
-        }
+        {label:'絵を見る', onClick:()=>{ showCutIn('post', ()=>{step=19; render();}); }},
+        {label:'見ない方がいい', onClick:()=>{ step=19; render(); }},
       ]);
       break;
-
     case 19:
-      if(choice1 === 'show'){
-        setText('チー娘', '……今のやつ', 'serious');
-      }else{
-        setText('チー娘', '普通の絵じゃないの。\n見た瞬間、ちょっと変な感じがして', 'serious');
-      }
+      if(choice1 === 'show') setText('チー娘','……今のやつ','serious');
+      else setText('チー娘','普通の絵じゃないの。\n見た瞬間、ちょっと変な感じがして','serious');
       break;
-
-    case 20:
-      setText('チー娘', 'なんていうか…\n“描いた”っていうより、置いていかれた感じ', 'serious');
-      break;
-
-    case 21:
-      setText('チー娘', '見た後、少しだけ手が冷たくなった。', 'worried');
-      break;
-
-    case 22:
-      setText('チー娘', 'しかもね。\n紙、ちょっと湿ってた', 'worried');
-      break;
-
-    case 23:
-      setText('チー娘', '雨、降ってないのに', 'serious');
-      break;
-
-    case 24:
-      setText('チー娘', 'で、日付が書いてあったの', 'worried');
-      break;
-
-    case 25:
-      setText('チー娘', '“昨日”って', 'serious');
-      break;
-
-    case 26:
-      setText('チー娘', 'でもこれ、今日入ってたんだよね', 'serious');
-      break;
-
+    case 20: setText('チー娘','なんていうか…\n“描いた”っていうより、置いていかれた感じ','serious'); break;
+    case 21: setText('チー娘','見た後、少しだけ手が冷たくなった。','worried'); break;
+    case 22: setText('チー娘','しかもね。\n紙、ちょっと湿ってた','worried'); break;
+    case 23: setText('チー娘','雨、降ってないのに','serious'); break;
+    case 24: setText('チー娘','で、日付が書いてあったの','worried'); break;
+    case 25: setText('チー娘','“昨日”って','serious'); break;
+    case 26: setText('チー娘','でもこれ、今日入ってたんだよね','serious'); break;
     case 27:
       setChoices([
-        { label:'子供のイタズラ？', onClick:()=>{ choice2='kid'; step=28; render(); } },
-        { label:'それやばくない？', onClick:()=>{ choice2='danger'; step=28; render(); } },
-        { label:'誰かのメッセージ？', onClick:()=>{ choice2='message'; step=28; render(); } },
+        {label:'子供のイタズラ？', onClick:()=>{choice2='kid'; step=28; render();}},
+        {label:'それやばくない？', onClick:()=>{choice2='danger'; step=28; render();}},
+        {label:'誰かのメッセージ？', onClick:()=>{choice2='message'; step=28; render();}},
       ]);
       break;
-
     case 28:
-      if(choice2 === 'kid'){
-        setText('チー娘', 'そう思いたい。\nでもね、線がすごい荒くて', 'worried');
-      }else if(choice2 === 'danger'){
-        setText('チー娘', 'うん。\nちょっと普通じゃない', 'serious');
-      }else{
-        setText('チー娘', 'それ思った。\n誰かに向けて書いてる感じ', 'serious');
-      }
+      if(choice2 === 'kid') setText('チー娘','そう思いたい。\nでもね、線がすごい荒くて','worried');
+      else if(choice2 === 'danger') setText('チー娘','うん。\nちょっと普通じゃない','serious');
+      else setText('チー娘','それ思った。\n誰かに向けて書いてる感じ','serious');
       break;
-
-    case 29:
-      setText('チー娘', 'でもね。\n名前、私じゃないの', 'serious');
-      break;
-
-    case 30:
-      setText('チー娘', '全然知らない人の名前', 'serious');
-      break;
-
-    case 31:
-      setText('チー娘', 'なのにさ。\nなんで、ここに入ってたんだろ', 'worried');
-      break;
-
-    case 32:
-      setText('チー娘', 'それでさっき、ポストをもう一回見に行ったの', 'worried');
-      break;
-
-    case 33:
-      setText('チー娘', 'そしたら、何も入ってなかった', 'soft');
-      break;
-
-    case 34:
-      setText('チー娘', 'でも……', 'serious');
-      break;
-
-    case 35:
-      setText('チー娘', '内側、濡れてたの', 'serious');
-      break;
-
-    case 36:
-      setText('チー娘', 'それと、ポストの縁に赤い繊維みたいなのが少しだけ付いてた。', 'serious');
-      break;
-
+    case 29: setText('チー娘','でもね。\n名前、私じゃないの','serious'); break;
+    case 30: setText('チー娘','全然知らない人の名前','serious'); break;
+    case 31: setText('チー娘','なのにさ。\nなんで、ここに入ってたんだろ','worried'); break;
+    case 32: setText('チー娘','それでさっき、ポストをもう一回見に行ったの','worried'); break;
+    case 33: setText('チー娘','そしたら、何も入ってなかった','soft'); break;
+    case 34: setText('チー娘','でも……','serious'); break;
+    case 35: setText('チー娘','内側、濡れてたの','serious'); break;
+    case 36: setText('チー娘','それと、ポストの縁に赤い繊維みたいなのが少しだけ付いてた。','serious'); break;
     case 37:
       setChoices([
-        { label:'間違いでしょ', onClick:()=>{ choice3='mistake'; step=38; render(); } },
-        { label:'誰か近くにいる', onClick:()=>{ choice3='near'; step=38; render(); } },
-        { label:'捨てた方がいい', onClick:()=>{ choice3='trash'; step=38; render(); } },
+        {label:'間違いでしょ', onClick:()=>{choice3='mistake'; step=38; render();}},
+        {label:'誰か近くにいる', onClick:()=>{choice3='near'; step=38; render();}},
+        {label:'捨てた方がいい', onClick:()=>{choice3='trash'; step=38; render();}},
       ]);
       break;
-
     case 38:
-      if(choice3 === 'mistake'){
-        setText('チー娘', 'そうだよね。\nただの間違いだよね', 'soft');
-      }else if(choice3 === 'near'){
-        setText('チー娘', '……それ。\nちょっと思った', 'serious');
-      }else{
-        setText('チー娘', 'うん、捨てた', 'serious');
-      }
+      if(choice3 === 'mistake') setText('チー娘','そうだよね。\nただの間違いだよね','soft');
+      else if(choice3 === 'near') setText('チー娘','……それ。\nちょっと思った','serious');
+      else setText('チー娘','うん、捨てた','serious');
       break;
-
     case 39:
       if(choice3 === 'mistake'){
-        showEnding(
-          'END A',
-          'でもさ。\nまた入ってたらどうしよ。\n\nチー娘\n「開かない方がよかったのかな…」'
-        );
+        showEnding('END A','でもさ。\nまた入ってたらどうしよ。\n\nチー娘\n「開かない方がよかったのかな…」');
       }else if(choice3 === 'near'){
-        showEnding(
-          'END B',
-          '誰か、この辺にいるのかな。\n“気づいてほしい”みたいな。\n\nチー娘\n「私のポストを選んだ理由、あるのかな…」'
-        );
+        showEnding('END B','誰か、この辺にいるのかな。\n“気づいてほしい”みたいな。\n\nチー娘\n「私のポストを選んだ理由、あるのかな…」');
       }else{
-        showEnding(
-          'END C',
-          'でもさ。\nさっきポスト見たら、また入ってた。\n\n同じやつ。\n\nチー娘\n「……捨てたはずなのに」'
-        );
+        showEnding('END C','でもさ。\nさっきポスト見たら、また入ってた。\n\n同じやつ。\n\nチー娘\n「……捨てたはずなのに」');
       }
       break;
   }
 }
 
+/* --------- エピソード2: 塀 --------- */
+function renderWall(){
+  switch(step){
+    case 0: setText('チー娘','ねえ…今日さ、変なの見たんだけど','worried'); break;
+    case 1: setText('チー娘','帰り道でね。','worried'); break;
+    case 2: setText('チー娘','駅からの裏道。','serious'); break;
+    case 3: setText('チー娘','塀の上に、人いたの。','serious'); break;
+    case 4: setText('チー娘','最初、子供が登ってるのかと思った。','worried'); break;
+    case 5: setText('チー娘','でも違った。','serious'); break;
+    case 6: setText('チー娘','立ってた。','serious'); break;
+    case 7: setText('チー娘','しかもさ。\n顔だけ、こっち向いてた。','serious'); break;
+    case 8: setText('チー娘','塀って2メートルくらいあるじゃん？','worried'); break;
+    case 9: setText('チー娘','なのに、胸から上しか見えてないのに\n目線が私と同じくらいだった。','serious'); break;
+    case 10: setText('チー娘','でね。','serious'); break;
+    case 11: setText('チー娘','なんか言ってた。','serious'); break;
+    case 12: setText('チー娘','“ねぇ”って。','serious'); break;
+    case 13: setText('チー娘','……でも、2回目から変だった。','worried'); break;
+    case 14: setText('チー娘','“ねぇねぇねぇねぇ”って。','serious'); break;
+    case 15:
+      setChoices([
+        {label:'気のせいじゃない？', onClick:()=>{choice1='safe'; step=16; render();}},
+        {label:'それやばくない？', onClick:()=>{choice1='danger'; step=16; render();}},
+        {label:'近づいた？', onClick:()=>{choice1='near'; step=16; render();}},
+      ]);
+      break;
+    case 16: setText('チー娘','近づいてない。','serious'); break;
+    case 17: setText('チー娘','でも……','worried'); break;
+    case 18: setText('チー娘','気づいたら、家の前まで来てた。','serious'); break;
+    case 19: setText('チー娘','それ家で話したらさ。','worried'); break;
+    case 20: setText('チー娘','お母さん、急に黙って。','serious'); break;
+    case 21: setText('チー娘','窓、全部閉めて。','serious'); break;
+    case 22: setText('チー娘','カーテンも閉めて。','serious'); break;
+    case 23: setText('チー娘','“今日は外見ないで”って言われた。','serious'); break;
+    case 24: setText('チー娘','あとね。','serious'); break;
+    case 25: setText('チー娘','“呼ばれても返事しないで”って。','serious'); break;
+    case 26: setText('チー娘','“絶対に”って。','serious'); break;
+    case 27: setText('チー娘','で、夜。','serious'); break;
+    case 28: setText('チー娘','来た。','serious'); break;
+    case 29: setText('チー娘','窓の外。','serious'); break;
+    case 30: setText('チー娘','声だけ。','serious'); break;
+    case 31: setText('チー娘','“ねぇ”じゃなくて。','serious'); break;
+    case 32: setText('チー娘','今度は、私の名前呼ばれた。','serious'); break;
+    case 33:
+      setChoices([
+        {label:'無視する', onClick:()=>{choice2='ignore'; step=34; render();}},
+        {label:'確認する', onClick:()=>{choice2='look'; step=34; render();}},
+        {label:'返事する', onClick:()=>{choice2='reply'; step=34; render();}},
+      ]);
+      break;
+    case 34:
+      if(choice2 === 'ignore'){
+        setText('チー娘','ずっと聞こえてたけど。','serious');
+      }else if(choice2 === 'look'){
+        showCutIn('wall', ()=>{step=35; render();});
+        return;
+      }else{
+        setText('チー娘','返した瞬間。','serious');
+      }
+      break;
+    case 35:
+      if(choice2 === 'ignore'){
+        setText('チー娘','そのうち消えた。','soft');
+      }else if(choice2 === 'look'){
+        setText('チー娘','……いた。','serious');
+      }else{
+        setText('チー娘','声、止まって。','serious');
+      }
+      break;
+    case 36:
+      if(choice2 === 'ignore'){
+        showEnding('END A','朝まで何もなかった。\n\nでも、あの声だけはずっと頭に残ってる。');
+      }else if(choice2 === 'look'){
+        showEnding('END B','塀の上から、こっちを見てた。\n\nチー娘\n「目、合ったと思う」');
+      }else{
+        showEnding('END C','……代わりに。\nドア、鳴った。');
+      }
+      break;
+  }
+}
+
+function render(){
+  if(ended) return;
+  if(currentEpisode === 'post') renderPost();
+  if(currentEpisode === 'wall') renderWall();
+}
+
 function nextStep(){
   if(ended) return;
-  if(step === 9 || step === 15 || step === 18 || step === 27 || step === 37) return;
+  const stopPoints = currentEpisode === 'post'
+    ? [9,15,18,27,37]
+    : [15,33];
+  if(stopPoints.includes(step)) return;
   step++;
   render();
 }
 
+/* events */
 startBtn.addEventListener('click', ()=>{
   initAudio();
   if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-  resetStory();
+  setScreen('select');
 });
 howBtn.addEventListener('click', showHow);
-backTitleBtn.addEventListener('click', goTitle);
+selectBackBtn.addEventListener('click', ()=>setScreen('top'));
+backSelectBtn.addEventListener('click', ()=>setScreen('select'));
 resetBtn.addEventListener('click', resetStory);
 playAgainBtn.addEventListener('click', resetStory);
-toTitleBtn.addEventListener('click', goTitle);
+toSelectBtn.addEventListener('click', ()=>setScreen('select'));
 nextBtn.addEventListener('click', nextStep);
 
-render();
+document.querySelectorAll('[data-episode]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    openEpisode(btn.dataset.episode);
+  });
+});
+
 setScreen('top');
 </script>
 </body>
