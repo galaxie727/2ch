@@ -50,8 +50,7 @@ body{
   pointer-events:none;
   overflow:hidden;
 }
-.bg::before,
-.bg::after{
+.bg::before,.bg::after{
   content:"";
   position:absolute;
   border-radius:50%;
@@ -173,16 +172,13 @@ body{
 
 /* エピソード選択 */
 .select{
-  min-height:100svh;
   padding:env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 16px);
-}
-.selectHeader{
-  padding-top:10px;
 }
 .selectTitle{
   font-size:28px;
   line-height:1.3;
   font-weight:800;
+  margin-top:10px;
 }
 .selectSub{
   margin-top:8px;
@@ -218,11 +214,24 @@ body{
 .epDesc{
   margin-top:8px;
   font-size:13px;
-  line-height:1.75;
+  line-height:1.72;
   color:#f1eef9;
 }
-.epBtn{
-  margin-top:12px;
+.epMeta{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--text2);
+}
+.locked{
+  opacity:.45;
+  filter:grayscale(.25);
+}
+.clearBadge{
+  display:inline-block;
+  margin-top:10px;
+  font-size:11px;
+  letter-spacing:.12em;
+  color:#d8c3ff;
 }
 
 /* プレイ */
@@ -252,6 +261,7 @@ body{
   font-size:12px;
   color:var(--text2);
   letter-spacing:.08em;
+  text-align:center;
 }
 .scene{
   position:relative;
@@ -350,8 +360,68 @@ body{
   width:26px;height:42px;
   border-radius:14px 14px 10px 10px;
   background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.05));
-  filter:blur(.3px);
   opacity:.55;
+}
+.elevatorFx{
+  position:absolute;
+  right:18px;
+  top:18px;
+  width:74px;
+  height:90px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.15);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+    linear-gradient(180deg, #3d4253 0%, #232734 100%);
+  box-shadow:0 10px 24px rgba(0,0,0,.28);
+}
+.elevatorFx::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:10px;
+  width:1px;
+  height:58px;
+  background:rgba(255,255,255,.16);
+}
+.elevatorFx::after{
+  content:"13";
+  position:absolute;
+  right:8px;
+  top:68px;
+  font-size:12px;
+  color:rgba(255,255,255,.58);
+}
+.roomFx{
+  position:absolute;
+  right:18px;
+  top:18px;
+  width:88px;
+  height:64px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.15);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+    linear-gradient(180deg, #463642 0%, #251d25 100%);
+  box-shadow:0 10px 24px rgba(0,0,0,.28);
+}
+.roomFx::before{
+  content:"";
+  position:absolute;
+  left:12px;
+  top:12px;
+  width:30px;
+  height:38px;
+  border-radius:4px;
+  border:1px solid rgba(255,255,255,.14);
+}
+.roomFx::after{
+  content:"□□";
+  position:absolute;
+  right:10px;
+  top:10px;
+  font-size:11px;
+  color:rgba(255,255,255,.46);
 }
 
 .uiZone{
@@ -386,7 +456,7 @@ body{
   backdrop-filter:blur(10px);
 }
 .text{
-  min-height:124px;
+  min-height:122px;
   font-size:18px;
   line-height:1.78;
   white-space:pre-wrap;
@@ -511,18 +581,16 @@ body{
   animation:cutFade .22s ease forwards, cutZoom 5s ease forwards;
 }
 @keyframes cutFade{
-  from{ opacity:0; }
-  to{ opacity:1; }
+  from{opacity:0}
+  to{opacity:1}
 }
 @keyframes cutZoom{
-  from{ transform:scale(1.16); }
-  to{ transform:scale(1); }
+  from{transform:scale(1.16)}
+  to{transform:scale(1)}
 }
 .cutInCaption{
   position:absolute;
-  left:0;
-  right:0;
-  bottom:18px;
+  left:0;right:0;bottom:18px;
   text-align:center;
   font-size:13px;
   color:rgba(255,255,255,.76);
@@ -536,19 +604,18 @@ body{
   background:
     radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.18) 65%, rgba(0,0,0,.58) 100%);
 }
-
 .flash{
   animation:flashBg .16s linear 1;
 }
 @keyframes flashBg{
-  0%{ filter:brightness(1); }
-  50%{ filter:brightness(1.25); }
-  100%{ filter:brightness(1); }
+  0%{filter:brightness(1)}
+  50%{filter:brightness(1.25)}
+  100%{filter:brightness(1)}
 }
 
 @media (max-width:380px){
   .title,.selectTitle{font-size:28px}
-  .text{font-size:17px;min-height:116px}
+  .text{font-size:17px;min-height:114px}
 }
 </style>
 </head>
@@ -575,7 +642,7 @@ body{
     <div class="topCard">
       <div class="topStory">
         怖い話、違和感のある話、少しだけ妙な話。<br>
-        1話ずつ短く遊べるエピソード集です。
+        短いエピソードを順番に読むタイプです。
       </div>
       <div class="topButtons">
         <button class="btn" id="startBtn">エピソード選択へ</button>
@@ -586,34 +653,56 @@ body{
 
   <!-- エピソード選択 -->
   <section id="screenSelect" class="screen select" hidden>
-    <div class="selectHeader">
-      <div class="kicker">EPISODE SELECT</div>
-      <div class="selectTitle">エピソードを選ぶ</div>
-      <div class="selectSub">
-        1話完結です。<br>
-        気になる話から読めます。
-      </div>
+    <div class="kicker">EPISODE SELECT</div>
+    <div class="selectTitle">エピソードを選ぶ</div>
+    <div class="selectSub">
+      全4話を読むと、最終話が解放されます。<br>
+      気になる話から読めます。
     </div>
 
     <div class="epList">
-      <div class="epCard">
+      <div class="epCard" id="card-post">
         <div class="epKicker">EPISODE 01</div>
         <div class="epTitle">ポストに、<br>知らない手紙が入ってた</div>
-        <div class="epDesc">
-          宛名も切手もない手紙。<br>
-          読み進めるほど、少しずつおかしい。
-        </div>
+        <div class="epDesc">宛名も切手もない手紙。読み進めるほど、少しずつおかしい。</div>
+        <div class="epMeta">共通ワード：ミナセ / 7月13日</div>
+        <div class="clearBadge" id="badge-post" hidden>CLEARED</div>
         <button class="btn epBtn" data-episode="post">この話を読む</button>
       </div>
 
-      <div class="epCard">
+      <div class="epCard" id="card-wall">
         <div class="epKicker">EPISODE 02</div>
-        <div class="epTitle">塀の上の、あれ</div>
-        <div class="epDesc">
-          裏道の塀の上にいた、妙に高い“何か”。<br>
-          夜になると、声だけが来る。
-        </div>
+        <div class="epTitle">塀の向こうの女</div>
+        <div class="epDesc">裏道の塀の向こうに、妙に大きい女がいる。夜になると、声だけが来る。</div>
+        <div class="epMeta">共通ワード：ミナセ</div>
+        <div class="clearBadge" id="badge-wall" hidden>CLEARED</div>
         <button class="btn epBtn" data-episode="wall">この話を読む</button>
+      </div>
+
+      <div class="epCard" id="card-elevator">
+        <div class="epKicker">EPISODE 03</div>
+        <div class="epTitle">エレベーターの階数</div>
+        <div class="epDesc">13階はないはずなのに、ボタンだけある。押すと、暗くなる。</div>
+        <div class="epMeta">共通ワード：13 / ミナセ</div>
+        <div class="clearBadge" id="badge-elevator" hidden>CLEARED</div>
+        <button class="btn epBtn" data-episode="elevator">この話を読む</button>
+      </div>
+
+      <div class="epCard" id="card-room">
+        <div class="epKicker">EPISODE 04</div>
+        <div class="epTitle">空き部屋の音</div>
+        <div class="epDesc">ずっと空室のはずなのに、夜だけ音がする。表札だけは残ってる。</div>
+        <div class="epMeta">共通ワード：ミナセ</div>
+        <div class="clearBadge" id="badge-room" hidden>CLEARED</div>
+        <button class="btn epBtn" data-episode="room">この話を読む</button>
+      </div>
+
+      <div class="epCard locked" id="card-final">
+        <div class="epKicker">FINAL</div>
+        <div class="epTitle">まだいる</div>
+        <div class="epDesc">4つの話を全部読むと解放されます。</div>
+        <div class="epMeta">共通ワードが繋がる</div>
+        <button class="btn epBtn" id="finalBtn" data-episode="final" disabled>未解放</button>
       </div>
     </div>
 
@@ -669,6 +758,7 @@ body{
   </section>
 </div>
 
+<!-- カットイン -->
 <div id="cutIn" class="cutIn" hidden>
   <div class="cutInInner">
     <img id="cutInImg" class="cutInImg" src="horror_art.png" alt="不気味な絵">
@@ -690,6 +780,7 @@ const backSelectBtn = document.getElementById('backSelectBtn');
 const resetBtn = document.getElementById('resetBtn');
 const playAgainBtn = document.getElementById('playAgainBtn');
 const toSelectBtn = document.getElementById('toSelectBtn');
+const finalBtn = document.getElementById('finalBtn');
 
 const textEl = document.getElementById('text');
 const choicesEl = document.getElementById('choices');
@@ -698,9 +789,9 @@ const controls = document.getElementById('controls');
 const hint = document.getElementById('hint');
 const charEl = document.getElementById('char');
 const speakerName = document.getElementById('speakerName');
-const appRoot = document.getElementById('appRoot');
 const storyLabel = document.getElementById('storyLabel');
 const sceneFx = document.getElementById('sceneFx');
+const appRoot = document.getElementById('appRoot');
 
 const endTitle = document.getElementById('endTitle');
 const endText = document.getElementById('endText');
@@ -708,27 +799,34 @@ const endText = document.getElementById('endText');
 const cutIn = document.getElementById('cutIn');
 const cutInImg = document.getElementById('cutInImg');
 
+const preloadAlt = new Image();
+let altLoaded = false;
+preloadAlt.onload = () => altLoaded = true;
+preloadAlt.src = 'horror_art_alt.png';
+
+const preloadWall = new Image();
+let wallLoaded = false;
+preloadWall.onload = () => wallLoaded = true;
+preloadWall.src = 'wall_art.png';
+
 let currentEpisode = null;
 let step = 0;
 let ended = false;
-let choice1 = null;
-let choice2 = null;
-let choice3 = null;
-let choice4 = null;
 let audioCtx = null;
 let cutSwapTimer1 = null;
 let cutSwapTimer2 = null;
 let cutSwapTimer3 = null;
 
-const preloadAlt = new Image();
-preloadAlt.src = 'horror_art_alt.png';
-let altLoaded = false;
-preloadAlt.onload = ()=>{ altLoaded = true; };
+let choice1 = null;
+let choice2 = null;
+let choice3 = null;
+let choice4 = null;
 
-const preloadWall = new Image();
-preloadWall.src = 'wall_art.png';
-let wallLoaded = false;
-preloadWall.onload = ()=>{ wallLoaded = true; };
+const cleared = JSON.parse(localStorage.getItem('chiThreadCleared') || '{}');
+
+function saveCleared(){
+  localStorage.setItem('chiThreadCleared', JSON.stringify(cleared));
+}
 
 function initAudio(){
   if(!audioCtx){
@@ -736,7 +834,6 @@ function initAudio(){
     if(AC) audioCtx = new AC();
   }
 }
-
 function tone(freq=540, duration=0.03, type='triangle', volume=0.018){
   if(!audioCtx) return;
   const now = audioCtx.currentTime;
@@ -751,8 +848,8 @@ function tone(freq=540, duration=0.03, type='triangle', volume=0.018){
   osc.start(now);
   osc.stop(now + duration);
 }
-function pageSe(){ tone(560, 0.03, 'triangle', 0.018); }
-function choiceSe(){ tone(620, 0.05, 'triangle', 0.025); }
+function pageSe(){ tone(560,0.03,'triangle',0.018); }
+function choiceSe(){ tone(620,0.05,'triangle',0.025); }
 
 function horrorSe(){
   if(!audioCtx) return;
@@ -795,11 +892,13 @@ function setScreen(name){
 function setMood(mood){
   charEl.className = 'char ' + mood;
 }
-
 function setSceneFx(type){
-  sceneFx.className = type === 'wall' ? 'wallFx' : 'letterFx';
+  sceneFx.className =
+    type === 'wall' ? 'wallFx' :
+    type === 'elevator' ? 'elevatorFx' :
+    type === 'room' ? 'roomFx' :
+    'letterFx';
 }
-
 function setText(name, text, mood='normal'){
   speakerName.textContent = name || 'チー娘';
   textEl.textContent = text;
@@ -810,7 +909,6 @@ function setText(name, text, mood='normal'){
   hint.hidden = false;
   pageSe();
 }
-
 function setChoices(arr){
   controls.hidden = true;
   hint.hidden = true;
@@ -834,6 +932,7 @@ function showHow(){
 ・「次へ」で読み進めます
 ・途中で選択肢が出ます
 ・一部の話では全画面演出が入ります
+・4話読むと最終話が解放されます
 
 必要画像
 ・girl.png
@@ -842,7 +941,19 @@ function showHow(){
 ・wall_art.png（なくても可）`);
 }
 
-function clearChoices(){
+function refreshSelectUI(){
+  ['post','wall','elevator','room'].forEach(id=>{
+    const badge = document.getElementById('badge-' + id);
+    if(badge) badge.hidden = !cleared[id];
+  });
+
+  const unlockFinal = cleared.post && cleared.wall && cleared.elevator && cleared.room;
+  document.getElementById('card-final').classList.toggle('locked', !unlockFinal);
+  finalBtn.disabled = !unlockFinal;
+  finalBtn.textContent = unlockFinal ? 'この話を読む' : '未解放';
+}
+
+function resetChoices(){
   choice1 = null;
   choice2 = null;
   choice3 = null;
@@ -854,19 +965,27 @@ function openEpisode(id){
   currentEpisode = id;
   step = 0;
   ended = false;
-  clearChoices();
-  storyLabel.textContent = id === 'post' ? 'ポストに、知らない手紙が入ってた' : '塀の上の、あれ';
-  setSceneFx(id === 'post' ? 'letter' : 'wall');
+  resetChoices();
+
+  const labels = {
+    post:'ポストに、知らない手紙が入ってた',
+    wall:'塀の向こうの女',
+    elevator:'エレベーターの階数',
+    room:'空き部屋の音',
+    final:'まだいる'
+  };
+
+  storyLabel.textContent = labels[id];
+  setSceneFx(id);
   setScreen('play');
   render();
 }
 
 function resetStory(){
   if(!currentEpisode) return;
-  initAudio();
   step = 0;
   ended = false;
-  clearChoices();
+  resetChoices();
   setScreen('play');
   render();
 }
@@ -898,25 +1017,20 @@ function showCutIn(kind='post', afterCallback){
   } else {
     cutInImg.src = 'horror_art.png';
   }
-
   cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
   cutIn.hidden = false;
 
-  requestAnimationFrame(()=>{
-    cutIn.classList.add('show');
-  });
+  requestAnimationFrame(()=>cutIn.classList.add('show'));
 
   if(kind === 'post' && altLoaded){
     cutSwapTimer1 = setTimeout(()=>{
       cutInImg.src = 'horror_art_alt.png';
       cutInImg.style.filter = 'brightness(.76) contrast(1.18) saturate(1.08)';
     }, 160);
-
     cutSwapTimer2 = setTimeout(()=>{
       cutInImg.src = 'horror_art.png';
       cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
     }, 320);
-
     cutSwapTimer3 = setTimeout(()=>{
       cutInImg.src = 'horror_art_alt.png';
       cutInImg.style.filter = 'brightness(.74) contrast(1.22) saturate(1.1)';
@@ -932,11 +1046,19 @@ function showCutIn(kind='post', afterCallback){
       if(afterCallback) afterCallback();
     }, 180);
   };
-
   cutIn.addEventListener('click', close, { once:true });
 }
 
-/* --------- エピソード1: ポスト --------- */
+function finishEpisode(id, endTitleText, endBodyText){
+  if(id !== 'final'){
+    cleared[id] = true;
+    saveCleared();
+    refreshSelectUI();
+  }
+  showEnding(endTitleText, endBodyText);
+}
+
+/* ===== EP1 ポスト ===== */
 function renderPost(){
   switch(step){
     case 0: setText('チー娘','ねえ…今日さ、変なもの入ってたの','worried'); break;
@@ -992,7 +1114,7 @@ function renderPost(){
     case 22: setText('チー娘','しかもね。\n紙、ちょっと湿ってた','worried'); break;
     case 23: setText('チー娘','雨、降ってないのに','serious'); break;
     case 24: setText('チー娘','で、日付が書いてあったの','worried'); break;
-    case 25: setText('チー娘','“昨日”って','serious'); break;
+    case 25: setText('チー娘','“7月13日”って','serious'); break;
     case 26: setText('チー娘','でもこれ、今日入ってたんだよね','serious'); break;
     case 27:
       setChoices([
@@ -1007,13 +1129,13 @@ function renderPost(){
       else setText('チー娘','それ思った。\n誰かに向けて書いてる感じ','serious');
       break;
     case 29: setText('チー娘','でもね。\n名前、私じゃないの','serious'); break;
-    case 30: setText('チー娘','全然知らない人の名前','serious'); break;
-    case 31: setText('チー娘','なのにさ。\nなんで、ここに入ってたんだろ','worried'); break;
-    case 32: setText('チー娘','それでさっき、ポストをもう一回見に行ったの','worried'); break;
-    case 33: setText('チー娘','そしたら、何も入ってなかった','soft'); break;
-    case 34: setText('チー娘','でも……','serious'); break;
-    case 35: setText('チー娘','内側、濡れてたの','serious'); break;
-    case 36: setText('チー娘','それと、ポストの縁に赤い繊維みたいなのが少しだけ付いてた。','serious'); break;
+    case 30: setText('チー娘','全然知らない人の名前。','serious'); break;
+    case 31: setText('チー娘','“ミナセ”って書いてあった。','serious'); break;
+    case 32: setText('チー娘','なのにさ。\nなんで、ここに入ってたんだろ','worried'); break;
+    case 33: setText('チー娘','それでさっき、ポストをもう一回見に行ったの','worried'); break;
+    case 34: setText('チー娘','そしたら、何も入ってなかった','soft'); break;
+    case 35: setText('チー娘','でも……','serious'); break;
+    case 36: setText('チー娘','内側、濡れてたの','serious'); break;
     case 37:
       setChoices([
         {label:'間違いでしょ', onClick:()=>{choice3='mistake'; step=38; render();}},
@@ -1028,29 +1150,29 @@ function renderPost(){
       break;
     case 39:
       if(choice3 === 'mistake'){
-        showEnding('END A','でもさ。\nまた入ってたらどうしよ。\n\nチー娘\n「開かない方がよかったのかな…」');
+        finishEpisode('post','END A','でもさ。\nまた入ってたらどうしよ。\n\nチー娘\n「開かない方がよかったのかな…」');
       }else if(choice3 === 'near'){
-        showEnding('END B','誰か、この辺にいるのかな。\n“気づいてほしい”みたいな。\n\nチー娘\n「私のポストを選んだ理由、あるのかな…」');
+        finishEpisode('post','END B','誰か、この辺にいるのかな。\n“気づいてほしい”みたいな。\n\nチー娘\n「私のポストを選んだ理由、あるのかな…」');
       }else{
-        showEnding('END C','でもさ。\nさっきポスト見たら、また入ってた。\n\n同じやつ。\n\nチー娘\n「……捨てたはずなのに」');
+        finishEpisode('post','END C','でもさ。\nさっきポスト見たら、また入ってた。\n\n同じやつ。\n\nチー娘\n「……捨てたはずなのに」');
       }
       break;
   }
 }
 
-/* --------- エピソード2: 塀 --------- */
+/* ===== EP2 塀 ===== */
 function renderWall(){
   switch(step){
     case 0: setText('チー娘','ねえ…今日さ、変なの見たんだけど','worried'); break;
     case 1: setText('チー娘','帰り道でね。','worried'); break;
     case 2: setText('チー娘','駅からの裏道。','serious'); break;
-    case 3: setText('チー娘','塀の上に、人いたの。','serious'); break;
-    case 4: setText('チー娘','最初、子供が登ってるのかと思った。','worried'); break;
+    case 3: setText('チー娘','塀の向こうに、人いたの。','serious'); break;
+    case 4: setText('チー娘','最初、誰か立ってるだけかと思った。','worried'); break;
     case 5: setText('チー娘','でも違った。','serious'); break;
-    case 6: setText('チー娘','立ってた。','serious'); break;
-    case 7: setText('チー娘','しかもさ。\n顔だけ、こっち向いてた。','serious'); break;
-    case 8: setText('チー娘','塀って2メートルくらいあるじゃん？','worried'); break;
-    case 9: setText('チー娘','なのに、胸から上しか見えてないのに\n目線が私と同じくらいだった。','serious'); break;
+    case 6: setText('チー娘','塀より、ずっと高かった。','serious'); break;
+    case 7: setText('チー娘','しかもさ。\n後ろ向きだった。','serious'); break;
+    case 8: setText('チー娘','気づいてないみたいに見えたのに','worried'); break;
+    case 9: setText('チー娘','昨日より位置が少し近かった。','serious'); break;
     case 10: setText('チー娘','でね。','serious'); break;
     case 11: setText('チー娘','なんか言ってた。','serious'); break;
     case 12: setText('チー娘','“ねぇ”って。','serious'); break;
@@ -1065,7 +1187,7 @@ function renderWall(){
       break;
     case 16: setText('チー娘','近づいてない。','serious'); break;
     case 17: setText('チー娘','でも……','worried'); break;
-    case 18: setText('チー娘','気づいたら、家の前まで来てた。','serious'); break;
+    case 18: setText('チー娘','気づいたら、家の近くまで来てた。','serious'); break;
     case 19: setText('チー娘','それ家で話したらさ。','worried'); break;
     case 20: setText('チー娘','お母さん、急に黙って。','serious'); break;
     case 21: setText('チー娘','窓、全部閉めて。','serious'); break;
@@ -1098,22 +1220,163 @@ function renderWall(){
       }
       break;
     case 35:
-      if(choice2 === 'ignore'){
-        setText('チー娘','そのうち消えた。','soft');
-      }else if(choice2 === 'look'){
-        setText('チー娘','……いた。','serious');
-      }else{
-        setText('チー娘','声、止まって。','serious');
-      }
+      if(choice2 === 'ignore') setText('チー娘','そのうち消えた。','soft');
+      else if(choice2 === 'look') setText('チー娘','……いた。','serious');
+      else setText('チー娘','声、止まって。','serious');
       break;
     case 36:
+      if(choice2 === 'ignore') setText('チー娘','朝になって、塀を見に行ったの。','worried');
+      else if(choice2 === 'look') setText('チー娘','服の裾に、何か書いてあった。','serious');
+      else setText('チー娘','……代わりに。','serious');
+      break;
+    case 37:
+      if(choice2 === 'ignore') setText('チー娘','そこ、何もなかった。','soft');
+      else if(choice2 === 'look') setText('チー娘','“ミナセ”って。','serious');
+      else setText('チー娘','ドア、鳴った。','serious');
+      break;
+    case 38:
       if(choice2 === 'ignore'){
-        showEnding('END A','朝まで何もなかった。\n\nでも、あの声だけはずっと頭に残ってる。');
+        finishEpisode('wall','END A','朝まで何もなかった。\n\nでも、あの声だけはずっと頭に残ってる。');
       }else if(choice2 === 'look'){
-        showEnding('END B','塀の上から、こっちを見てた。\n\nチー娘\n「目、合ったと思う」');
+        finishEpisode('wall','END B','塀の向こうから、こっちを見てた。\n\nチー娘\n「目、合ったと思う」');
       }else{
-        showEnding('END C','……代わりに。\nドア、鳴った。');
+        finishEpisode('wall','END C','返事した瞬間、外の音が全部止まった。\n\nそのあと、ドアだけ鳴った。');
       }
+      break;
+  }
+}
+
+/* ===== EP3 エレベーター ===== */
+function renderElevator(){
+  switch(step){
+    case 0: setText('チー娘','このマンションさ、13階ないんだよね。','worried'); break;
+    case 1: setText('チー娘','でも、ボタンだけあるの。','serious'); break;
+    case 2: setText('チー娘','最初は飾りかと思ってた。','worried'); break;
+    case 3: setText('チー娘','昨日、押してみた。','serious'); break;
+    case 4: setText('チー娘','そしたら、照明だけ一瞬消えて。','serious'); break;
+    case 5: setText('チー娘','誰か乗ってきた気配した。','serious'); break;
+    case 6: setText('チー娘','でも誰もいない。','serious'); break;
+    case 7: setText('チー娘','数字の表示も消えてた。','serious'); break;
+    case 8: setText('チー娘','で、止まったの。','worried'); break;
+    case 9: setText('チー娘','表示されてない階で。','serious'); break;
+    case 10:
+      setChoices([
+        {label:'降りる', onClick:()=>{choice1='off'; step=11; render();}},
+        {label:'そのまま乗る', onClick:()=>{choice1='stay'; step=11; render();}},
+        {label:'ボタンを見る', onClick:()=>{choice1='btn'; step=11; render();}},
+      ]);
+      break;
+    case 11:
+      if(choice1 === 'off') setText('チー娘','扉は開いた。でも真っ暗だった。','serious');
+      else if(choice1 === 'stay') setText('チー娘','動かないまま、扉だけ閉まりかけた。','serious');
+      else setText('チー娘','13の横に、何か削った跡があった。','serious');
+      break;
+    case 12: setText('チー娘','よく見たら、名前みたいだった。','worried'); break;
+    case 13: setText('チー娘','“ミナセ”って。','serious'); break;
+    case 14: setText('チー娘','その瞬間、上に動いた。','serious'); break;
+    case 15: setText('チー娘','まだ上があるみたいに。','serious'); break;
+    case 16:
+      setChoices([
+        {label:'目を閉じる', onClick:()=>{choice2='close'; step=17; render();}},
+        {label:'階数を見る', onClick:()=>{choice2='num'; step=17; render();}},
+        {label:'ドアに近づく', onClick:()=>{choice2='door'; step=17; render();}},
+      ]);
+      break;
+    case 17:
+      if(choice2 === 'close') setText('チー娘','音だけしてた。カチ、カチって。','serious');
+      else if(choice2 === 'num') setText('チー娘','表示、何も出てないのに上がってた。','serious');
+      else setText('チー娘','ドアの隙間から、白いのが見えた。','serious');
+      break;
+    case 18: setText('チー娘','で、急に止まって。','serious'); break;
+    case 19: setText('チー娘','“チーン”って鳴った。','serious'); break;
+    case 20: setText('チー娘','でも、どこにも着いてなかった。','serious'); break;
+    case 21:
+      if(choice2 === 'close'){
+        finishEpisode('elevator','END A','目を開けたら、1階だった。\n\nでも、乗った階に戻れてない気がする。');
+      }else if(choice2 === 'num'){
+        finishEpisode('elevator','END B','表示は消えたままだった。\n\nチー娘\n「降りた階、まだ書いてない」');
+      }else{
+        finishEpisode('elevator','END C','隙間の向こうに、誰か立ってた。\n\nでも扉は、開かなかった。');
+      }
+      break;
+  }
+}
+
+/* ===== EP4 空き部屋 ===== */
+function renderRoom(){
+  switch(step){
+    case 0: setText('チー娘','隣の部屋、ずっと空室のはずなんだけど。','worried'); break;
+    case 1: setText('チー娘','夜だけ音するの。','serious'); break;
+    case 2: setText('チー娘','水音と、足音。','serious'); break;
+    case 3: setText('チー娘','たまに、引きずるみたいな音も。','serious'); break;
+    case 4: setText('チー娘','管理人さんに聞いたら、誰も住んでないって。','worried'); break;
+    case 5: setText('チー娘','でも表札だけ残ってる。','serious'); break;
+    case 6: setText('チー娘','“ミナセ”って。','serious'); break;
+    case 7: setText('チー娘','それで、今日見たらさ。','worried'); break;
+    case 8: setText('チー娘','部屋番号、消えてた。','serious'); break;
+    case 9:
+      setChoices([
+        {label:'壁を叩く', onClick:()=>{choice1='wall'; step=10; render();}},
+        {label:'管理人に聞く', onClick:()=>{choice1='mgr'; step=10; render();}},
+        {label:'ドアを見る', onClick:()=>{choice1='door'; step=10; render();}},
+      ]);
+      break;
+    case 10:
+      if(choice1 === 'wall') setText('チー娘','叩いたら、向こうも一回だけ叩いた。','serious');
+      else if(choice1 === 'mgr') setText('チー娘','“その部屋番号は最初からない”って言われた。','serious');
+      else setText('チー娘','ドアの下、濡れてた。','serious');
+      break;
+    case 11: setText('チー娘','図面を見せてもらったの。','worried'); break;
+    case 12: setText('チー娘','そこ、壁になってた。','serious'); break;
+    case 13: setText('チー娘','でも音は、今もする。','serious'); break;
+    case 14: setText('チー娘','さっきより近くで。','serious'); break;
+    case 15:
+      setChoices([
+        {label:'聞こえないふり', onClick:()=>{choice2='ignore'; step=16; render();}},
+        {label:'もう一回叩く', onClick:()=>{choice2='tap'; step=16; render();}},
+        {label:'耳を当てる', onClick:()=>{choice2='ear'; step=16; render();}},
+      ]);
+      break;
+    case 16:
+      if(choice2 === 'ignore') setText('チー娘','布団かぶって寝た。','soft');
+      else if(choice2 === 'tap') setText('チー娘','今度は三回返ってきた。','serious');
+      else setText('チー娘','……中で、誰か笑った。','serious');
+      break;
+    case 17: setText('チー娘','次の日。','worried'); break;
+    case 18: setText('チー娘','その表札もなくなってた。','serious'); break;
+    case 19:
+      if(choice2 === 'ignore'){
+        finishEpisode('room','END A','もう音はしない。\n\nでも、壁の向こうが少し薄くなった気がする。');
+      }else if(choice2 === 'tap'){
+        finishEpisode('room','END B','返ってきた回数、今でも覚えてる。\n\n一回多かった。');
+      }else{
+        finishEpisode('room','END C','笑い声のあと、水音が止んだ。\n\nそれから、ずっと静か。');
+      }
+      break;
+  }
+}
+
+/* ===== FINAL ===== */
+function renderFinal(){
+  switch(step){
+    case 0: setText('チー娘','ねえ、この名前さ。','worried'); break;
+    case 1: setText('チー娘','全部に出てたよね。','serious'); break;
+    case 2: setText('チー娘','手紙も。','serious'); break;
+    case 3: setText('チー娘','塀も。','serious'); break;
+    case 4: setText('チー娘','エレベーターも。','serious'); break;
+    case 5: setText('チー娘','空き部屋も。','serious'); break;
+    case 6: setText('チー娘','……でね。','serious'); break;
+    case 7: setText('チー娘','さっき、最初の手紙もう一回見たの。','worried'); break;
+    case 8: setText('チー娘','住所のところ。','serious'); break;
+    case 9: setText('チー娘','あれ、今は読めるの。','serious'); break;
+    case 10: setText('チー娘','私の部屋番号だった。','serious'); break;
+    case 11: setText('チー娘','最初から、私に来てたみたい。','serious'); break;
+    case 12: setText('チー娘','でもさ。','serious'); break;
+    case 13: setText('チー娘','これ、もし“ミナセ”が私じゃなかったら。','serious'); break;
+    case 14: setText('チー娘','誰だったんだろうね。','worried'); break;
+    case 15: setText('チー娘','……今、外で音した。','serious'); break;
+    case 16:
+      finishEpisode('final','END','まだいる');
       break;
   }
 }
@@ -1122,39 +1385,56 @@ function render(){
   if(ended) return;
   if(currentEpisode === 'post') renderPost();
   if(currentEpisode === 'wall') renderWall();
+  if(currentEpisode === 'elevator') renderElevator();
+  if(currentEpisode === 'room') renderRoom();
+  if(currentEpisode === 'final') renderFinal();
 }
 
 function nextStep(){
   if(ended) return;
-  const stopPoints = currentEpisode === 'post'
-    ? [9,15,18,27,37]
-    : [15,33];
-  if(stopPoints.includes(step)) return;
+  const stopPoints = {
+    post:[9,15,18,27,37],
+    wall:[15,33],
+    elevator:[10,16],
+    room:[9,15],
+    final:[]
+  };
+  if((stopPoints[currentEpisode] || []).includes(step)) return;
   step++;
   render();
 }
 
-/* events */
+/* init */
 startBtn.addEventListener('click', ()=>{
   initAudio();
   if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  refreshSelectUI();
   setScreen('select');
 });
 howBtn.addEventListener('click', showHow);
 selectBackBtn.addEventListener('click', ()=>setScreen('top'));
-backSelectBtn.addEventListener('click', ()=>setScreen('select'));
+backSelectBtn.addEventListener('click', ()=>{
+  refreshSelectUI();
+  setScreen('select');
+});
 resetBtn.addEventListener('click', resetStory);
 playAgainBtn.addEventListener('click', resetStory);
-toSelectBtn.addEventListener('click', ()=>setScreen('select'));
+toSelectBtn.addEventListener('click', ()=>{
+  refreshSelectUI();
+  setScreen('select');
+});
 nextBtn.addEventListener('click', nextStep);
 
 document.querySelectorAll('[data-episode]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
+    if(btn.disabled) return;
+    initAudio();
     if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     openEpisode(btn.dataset.episode);
   });
 });
 
+refreshSelectUI();
 setScreen('top');
 </script>
 </body>
