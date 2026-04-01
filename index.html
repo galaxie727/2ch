@@ -14,23 +14,14 @@ html,body{
   font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
   -webkit-tap-highlight-color:transparent;
 }
-button,input,textarea,select{
-  font:inherit;
-}
-[hidden]{
-  display:none !important;
-}
+button,input,textarea,select{font:inherit}
+[hidden]{display:none !important}
 
 :root{
   --maxw:430px;
-  --bg1:#121218;
-  --bg2:#1b1b24;
   --panel:rgba(22,22,30,.88);
-  --panel2:rgba(255,255,255,.06);
   --stroke:rgba(255,255,255,.12);
   --accent:#d8c3ff;
-  --accent2:#8f7cff;
-  --danger:#ff9aa9;
   --text2:rgba(255,255,255,.72);
   --shadow:0 10px 30px rgba(0,0,0,.34);
 }
@@ -53,18 +44,15 @@ body{
     linear-gradient(180deg, #161620 0%, #0d0d10 100%);
 }
 
-/* 背景演出 */
 .bg{
   position:absolute;
   inset:0;
   pointer-events:none;
   overflow:hidden;
 }
-.bg::before,
-.bg::after{
+.bg::before,.bg::after{
   content:"";
   position:absolute;
-  inset:auto;
   border-radius:50%;
   filter:blur(42px);
   opacity:.18;
@@ -80,7 +68,6 @@ body{
   background:#ff7ea8;
 }
 
-/* 画面 */
 .screen{
   min-height:100svh;
   display:flex;
@@ -97,9 +84,7 @@ body{
   flex-direction:column;
   justify-content:space-between;
 }
-.topHeader{
-  padding-top:12px;
-}
+.topHeader{padding-top:12px}
 .kicker{
   font-size:12px;
   letter-spacing:.18em;
@@ -119,7 +104,6 @@ body{
   color:var(--text2);
   line-height:1.7;
 }
-
 .hero{
   position:relative;
   height:42svh;
@@ -148,7 +132,6 @@ body{
   from{ transform:translateY(0) scale(1); }
   to{ transform:translateY(-6px) scale(1.015); }
 }
-
 .topCard{
   margin-top:14px;
   background:var(--panel);
@@ -179,9 +162,7 @@ body{
   background:linear-gradient(180deg, #6b58ff 0%, #4f40d9 100%);
   box-shadow:0 10px 24px rgba(79,64,217,.3);
 }
-.btn:active{
-  transform:scale(.985);
-}
+.btn:active{transform:scale(.985)}
 .btnSub{
   background:rgba(255,255,255,.08);
   color:#fff;
@@ -189,14 +170,13 @@ body{
   box-shadow:none;
 }
 
-/* プレイ画面 */
+/* プレイ */
 .play{
   min-height:100svh;
   display:flex;
   flex-direction:column;
   padding-top:env(safe-area-inset-top);
 }
-
 .statusBar{
   display:flex;
   align-items:center;
@@ -218,7 +198,6 @@ body{
   color:var(--text2);
   letter-spacing:.08em;
 }
-
 .scene{
   position:relative;
   flex:1;
@@ -227,7 +206,6 @@ body{
   justify-content:space-between;
   min-height:0;
 }
-
 .charArea{
   position:relative;
   height:41svh;
@@ -309,7 +287,6 @@ body{
   background:var(--accent);
   box-shadow:0 0 12px rgba(216,195,255,.7);
 }
-
 .textBox{
   background:var(--panel);
   border:1px solid var(--stroke);
@@ -319,9 +296,9 @@ body{
   backdrop-filter:blur(10px);
 }
 .text{
-  min-height:108px;
+  min-height:124px;
   font-size:18px;
-  line-height:1.75;
+  line-height:1.78;
   white-space:pre-wrap;
 }
 .controls{
@@ -339,7 +316,6 @@ body{
   border:1px solid var(--stroke);
   font-size:14px;
 }
-
 .choices{
   display:flex;
   flex-direction:column;
@@ -358,10 +334,7 @@ body{
   box-shadow:0 8px 20px rgba(0,0,0,.18);
   line-height:1.5;
 }
-.choice:active{
-  transform:scale(.985);
-}
-
+.choice:active{transform:scale(.985)}
 .hint{
   margin-top:10px;
   text-align:center;
@@ -369,7 +342,7 @@ body{
   color:var(--text2);
 }
 
-/* 終了画面 */
+/* 結果 */
 .result{
   min-height:100svh;
   display:flex;
@@ -409,18 +382,18 @@ body{
   margin-top:16px;
 }
 
-/* カットイン：ここを強化 */
+/* カットイン */
 .cutIn{
   position:fixed;
   inset:0;
-  z-index:50;
-  background:rgba(0,0,0,.985);
+  z-index:9999;
+  background:#000;
   display:flex;
   align-items:center;
   justify-content:center;
   opacity:0;
   pointer-events:none;
-  transition:opacity .18s ease;
+  transition:opacity .14s ease;
 }
 .cutIn.show{
   opacity:1;
@@ -436,29 +409,33 @@ body{
 .cutInImg{
   position:absolute;
   inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;           /* 画面いっぱい */
+  width:100vw;
+  height:100dvh;
+  object-fit:cover;
   object-position:center center;
   opacity:0;
-  transform:scale(1.10);
-  transition:
-    opacity .35s ease,
-    transform 4.8s ease,
-    filter .12s ease;
-  filter:brightness(.82) contrast(1.08) saturate(1.04);
-  background:#000;
+  transform:scale(1.16);
+  filter:brightness(.8) contrast(1.1) saturate(1.04);
 }
 .cutIn.show .cutInImg{
-  opacity:1;
-  transform:scale(1);
+  animation:cutFade .22s ease forwards, cutZoom 5s ease forwards;
+}
+@keyframes cutFade{
+  from{ opacity:0; }
+  to{ opacity:1; }
+}
+@keyframes cutZoom{
+  from{ transform:scale(1.16); }
+  to{ transform:scale(1.00); }
 }
 .cutInCaption{
   position:absolute;
-  left:0; right:0; bottom:18px;
+  left:0;
+  right:0;
+  bottom:18px;
   text-align:center;
   font-size:13px;
-  color:rgba(255,255,255,.74);
+  color:rgba(255,255,255,.76);
   text-shadow:0 2px 10px rgba(0,0,0,.6);
   letter-spacing:.04em;
 }
@@ -467,7 +444,7 @@ body{
   inset:0;
   pointer-events:none;
   background:
-    radial-gradient(circle at center, transparent 42%, rgba(0,0,0,.18) 68%, rgba(0,0,0,.52) 100%);
+    radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.18) 65%, rgba(0,0,0,.58) 100%);
 }
 
 .flash{
@@ -481,7 +458,7 @@ body{
 
 @media (max-width:380px){
   .title{font-size:28px}
-  .text{font-size:17px;min-height:100px}
+  .text{font-size:17px;min-height:116px}
 }
 </style>
 </head>
@@ -489,7 +466,6 @@ body{
 <div class="app" id="appRoot">
   <div class="bg"></div>
 
-  <!-- タイトル -->
   <section id="screenTop" class="screen top">
     <div class="topHeader">
       <div class="kicker">CHI-MUSUME THREAD STORY</div>
@@ -517,7 +493,6 @@ body{
     </div>
   </section>
 
-  <!-- プレイ -->
   <section id="screenPlay" class="screen play" hidden>
     <div class="statusBar">
       <button class="smallBtn" id="backTitleBtn">タイトル</button>
@@ -537,7 +512,6 @@ body{
 
         <div class="textBox">
           <div id="text" class="text"></div>
-
           <div id="choices" class="choices"></div>
 
           <div id="controls" class="controls">
@@ -550,7 +524,6 @@ body{
     </div>
   </section>
 
-  <!-- 結果 -->
   <section id="screenResult" class="screen result" hidden>
     <div class="resultCard">
       <div class="endLabel">ENDING</div>
@@ -565,7 +538,6 @@ body{
   </section>
 </div>
 
-<!-- 全画面カットイン -->
 <div id="cutIn" class="cutIn" hidden>
   <div class="cutInInner">
     <img id="cutInImg" class="cutInImg" src="horror_art.png" alt="不気味な絵">
@@ -605,11 +577,18 @@ let step = 0;
 let choice1 = null;
 let choice2 = null;
 let choice3 = null;
+let choice4 = null;
 let ended = false;
 let audioCtx = null;
 let cutSwapTimer1 = null;
 let cutSwapTimer2 = null;
 let cutSwapTimer3 = null;
+let altLoaded = false;
+
+const preloadAlt = new Image();
+preloadAlt.onload = ()=>{ altLoaded = true; };
+preloadAlt.onerror = ()=>{ altLoaded = false; };
+preloadAlt.src = 'horror_art_alt.png';
 
 function initAudio(){
   if(!audioCtx){
@@ -633,13 +612,8 @@ function tone(freq=540, duration=0.03, type='triangle', volume=0.018){
   osc.stop(now + duration);
 }
 
-function pageSe(){
-  tone(560, 0.03, 'triangle', 0.018);
-}
-
-function choiceSe(){
-  tone(620, 0.05, 'triangle', 0.025);
-}
+function pageSe(){ tone(560, 0.03, 'triangle', 0.018); }
+function choiceSe(){ tone(620, 0.05, 'triangle', 0.025); }
 
 function horrorSe(){
   if(!audioCtx) return;
@@ -710,8 +684,7 @@ function setChoices(arr){
 }
 
 function showHow(){
-  alert(
-`あそびかた
+  alert(`あそびかた
 
 ・「次へ」で読み進めます
 ・途中で選択肢が出ます
@@ -721,8 +694,7 @@ function showHow(){
 必要画像
 ・girl.png
 ・horror_art.png
-・horror_art_alt.png（差分用・なくても可）`
-  );
+・horror_art_alt.png（差分用・なくても可）`);
 }
 
 function resetStory(){
@@ -731,6 +703,7 @@ function resetStory(){
   choice1 = null;
   choice2 = null;
   choice3 = null;
+  choice4 = null;
   ended = false;
   setScreen('play');
   render();
@@ -756,6 +729,11 @@ function clearCutTimers(){
   cutSwapTimer3 = null;
 }
 
+function safeSwapToAlt(){
+  if(!altLoaded) return;
+  cutInImg.src = 'horror_art_alt.png';
+}
+
 function showCutIn(afterCallback){
   initAudio();
   horrorSe();
@@ -765,29 +743,27 @@ function showCutIn(afterCallback){
   clearCutTimers();
 
   cutInImg.src = 'horror_art.png';
-  cutInImg.style.filter = 'brightness(.82) contrast(1.08) saturate(1.04)';
+  cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
   cutIn.hidden = false;
 
   requestAnimationFrame(()=>{
     cutIn.classList.add('show');
   });
 
-  /* 一瞬だけ差分を入れる */
   cutSwapTimer1 = setTimeout(()=>{
-    cutInImg.src = 'horror_art_alt.png';
-    cutInImg.style.filter = 'brightness(.78) contrast(1.16) saturate(1.08)';
-  }, 120);
+    safeSwapToAlt();
+    cutInImg.style.filter = 'brightness(.76) contrast(1.18) saturate(1.08)';
+  }, 160);
 
   cutSwapTimer2 = setTimeout(()=>{
     cutInImg.src = 'horror_art.png';
-    cutInImg.style.filter = 'brightness(.82) contrast(1.08) saturate(1.04)';
-  }, 220);
+    cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
+  }, 320);
 
-  /* もう一度軽く差分 */
   cutSwapTimer3 = setTimeout(()=>{
-    cutInImg.src = 'horror_art_alt.png';
-    cutInImg.style.filter = 'brightness(.76) contrast(1.2) saturate(1.1)';
-  }, 520);
+    safeSwapToAlt();
+    cutInImg.style.filter = 'brightness(.74) contrast(1.22) saturate(1.1)';
+  }, 620);
 
   const close = ()=>{
     clearCutTimers();
@@ -795,7 +771,7 @@ function showCutIn(afterCallback){
     setTimeout(()=>{
       cutIn.hidden = true;
       cutInImg.src = 'horror_art.png';
-      cutInImg.style.filter = 'brightness(.82) contrast(1.08) saturate(1.04)';
+      cutInImg.style.filter = 'brightness(.8) contrast(1.1) saturate(1.04)';
       cutIn.removeEventListener('click', close);
       if(afterCallback) afterCallback();
     }, 180);
@@ -814,38 +790,46 @@ function render(){
       break;
 
     case 1:
-      setText('チー娘', 'ポストに。', 'worried');
+      setText('チー娘', '帰ってきて、いつもみたいにポスト開けたの。', 'worried');
       break;
 
     case 2:
-      setText('チー娘', '手紙。', 'serious');
+      setText('チー娘', 'そしたらね。\n郵便はそれだけだった。', 'serious');
       break;
 
     case 3:
-      setText('チー娘', 'でもね。\n宛名、なかったの', 'serious');
+      setText('チー娘', '手紙。', 'serious');
       break;
 
     case 4:
-      setText('チー娘', '切手もないし、誰かが直接入れたっぽい', 'worried');
+      setText('チー娘', 'でもね。\n宛名、なかったの', 'serious');
       break;
 
     case 5:
-      setText('チー娘', 'しかもさ。\n入ってたの、夜だったんだよね', 'serious');
+      setText('チー娘', '切手もないし、誰かが直接入れたっぽい', 'worried');
       break;
 
     case 6:
-      setText('チー娘', 'その日は雨も降ってないし、\n配達が来る時間でもなかったの', 'worried');
+      setText('チー娘', 'しかもさ。\n入ってたの、夜だったんだよね', 'serious');
       break;
 
     case 7:
-      setChoices([
-        { label:'見せて', onClick:()=>{ choice1='show'; step=8; render(); } },
-        { label:'やめとけ', onClick:()=>{ choice1='stop'; step=8; render(); } },
-        { label:'それ怖くない？', onClick:()=>{ choice1='scary'; step=8; render(); } },
-      ]);
+      setText('チー娘', 'その日は雨も降ってないし、\n配達が来る時間でもなかったの', 'worried');
       break;
 
     case 8:
+      setText('チー娘', 'なのに、封筒だけ少し湿ってた。', 'serious');
+      break;
+
+    case 9:
+      setChoices([
+        { label:'見せて', onClick:()=>{ choice1='show'; step=10; render(); } },
+        { label:'やめとけ', onClick:()=>{ choice1='stop'; step=10; render(); } },
+        { label:'それ怖くない？', onClick:()=>{ choice1='scary'; step=10; render(); } },
+      ]);
+      break;
+
+    case 10:
       if(choice1 === 'show'){
         setText('チー娘', 'うん…いいけど', 'worried');
       }else if(choice1 === 'stop'){
@@ -855,29 +839,51 @@ function render(){
       }
       break;
 
-    case 9:
-      setText('チー娘', '文章がね。\n途中で同じ言葉が何回も繰り返されてるの', 'serious');
-      break;
-
-    case 10:
-      setText('チー娘', '意味もよく分からなくて。\n怒ってる感じだけは分かる', 'serious');
-      break;
-
     case 11:
-      setText('チー娘', 'しかも、途中から字の大きさが変わってて…\n後ろにいくほど、だんだん乱れてる', 'worried');
+      setText('チー娘', '開けたら文章が入ってた。', 'serious');
       break;
 
     case 12:
-      setText('チー娘', 'あとね。\n紙に絵が描いてあったの', 'worried');
+      setText('チー娘', '途中で同じ言葉が何回も繰り返されてるの', 'serious');
       break;
 
     case 13:
+      setText('チー娘', '意味もよく分からなくて。\n怒ってる感じだけは分かる', 'serious');
+      break;
+
+    case 14:
+      setText('チー娘', 'しかも、途中から字の大きさが変わってて…\n後ろにいくほど、だんだん乱れてる', 'worried');
+      break;
+
+    case 15:
+      setChoices([
+        { label:'文章を読む', onClick:()=>{ choice4='read'; step=16; render(); } },
+        { label:'裏返してみる', onClick:()=>{ choice4='turn'; step=16; render(); } },
+        { label:'もう閉じる', onClick:()=>{ choice4='close'; step=16; render(); } },
+      ]);
+      break;
+
+    case 16:
+      if(choice4 === 'read'){
+        setText('チー娘', '最後の方だけ、インクが潰れてて読めなかった。', 'serious');
+      }else if(choice4 === 'turn'){
+        setText('チー娘', '裏返したら、紙の裏に赤い染みがにじんでた。', 'serious');
+      }else{
+        setText('チー娘', '閉じようとした時に、紙の裏に何か見えたの。', 'worried');
+      }
+      break;
+
+    case 17:
+      setText('チー娘', 'あとね。\n紙に絵が描いてあったの', 'worried');
+      break;
+
+    case 18:
       setChoices([
         {
           label:'絵を見る',
           onClick:()=>{
             showCutIn(()=>{
-              step = 14;
+              step = 19;
               render();
             });
           }
@@ -885,14 +891,14 @@ function render(){
         {
           label:'見ない方がいい',
           onClick:()=>{
-            step = 14;
+            step = 19;
             render();
           }
         }
       ]);
       break;
 
-    case 14:
+    case 19:
       if(choice1 === 'show'){
         setText('チー娘', '……今のやつ', 'serious');
       }else{
@@ -900,39 +906,43 @@ function render(){
       }
       break;
 
-    case 15:
+    case 20:
       setText('チー娘', 'なんていうか…\n“描いた”っていうより、置いていかれた感じ', 'serious');
       break;
 
-    case 16:
-      setText('チー娘', 'しかもね。\n紙、ちょっと湿ってた', 'worried');
-      break;
-
-    case 17:
-      setText('チー娘', '雨、降ってないのに', 'serious');
-      break;
-
-    case 18:
-      setText('チー娘', 'で、日付が書いてあったの', 'worried');
-      break;
-
-    case 19:
-      setText('チー娘', '“昨日”って', 'serious');
-      break;
-
-    case 20:
-      setText('チー娘', 'でもこれ、今日入ってたんだよね', 'serious');
-      break;
-
     case 21:
-      setChoices([
-        { label:'子供のイタズラ？', onClick:()=>{ choice2='kid'; step=22; render(); } },
-        { label:'それやばくない？', onClick:()=>{ choice2='danger'; step=22; render(); } },
-        { label:'誰かのメッセージ？', onClick:()=>{ choice2='message'; step=22; render(); } },
-      ]);
+      setText('チー娘', '見た後、少しだけ手が冷たくなった。', 'worried');
       break;
 
     case 22:
+      setText('チー娘', 'しかもね。\n紙、ちょっと湿ってた', 'worried');
+      break;
+
+    case 23:
+      setText('チー娘', '雨、降ってないのに', 'serious');
+      break;
+
+    case 24:
+      setText('チー娘', 'で、日付が書いてあったの', 'worried');
+      break;
+
+    case 25:
+      setText('チー娘', '“昨日”って', 'serious');
+      break;
+
+    case 26:
+      setText('チー娘', 'でもこれ、今日入ってたんだよね', 'serious');
+      break;
+
+    case 27:
+      setChoices([
+        { label:'子供のイタズラ？', onClick:()=>{ choice2='kid'; step=28; render(); } },
+        { label:'それやばくない？', onClick:()=>{ choice2='danger'; step=28; render(); } },
+        { label:'誰かのメッセージ？', onClick:()=>{ choice2='message'; step=28; render(); } },
+      ]);
+      break;
+
+    case 28:
       if(choice2 === 'kid'){
         setText('チー娘', 'そう思いたい。\nでもね、線がすごい荒くて', 'worried');
       }else if(choice2 === 'danger'){
@@ -942,43 +952,47 @@ function render(){
       }
       break;
 
-    case 23:
+    case 29:
       setText('チー娘', 'でもね。\n名前、私じゃないの', 'serious');
       break;
 
-    case 24:
+    case 30:
       setText('チー娘', '全然知らない人の名前', 'serious');
       break;
 
-    case 25:
+    case 31:
       setText('チー娘', 'なのにさ。\nなんで、ここに入ってたんだろ', 'worried');
       break;
 
-    case 26:
+    case 32:
       setText('チー娘', 'それでさっき、ポストをもう一回見に行ったの', 'worried');
       break;
 
-    case 27:
+    case 33:
       setText('チー娘', 'そしたら、何も入ってなかった', 'soft');
       break;
 
-    case 28:
+    case 34:
       setText('チー娘', 'でも……', 'serious');
       break;
 
-    case 29:
+    case 35:
       setText('チー娘', '内側、濡れてたの', 'serious');
       break;
 
-    case 30:
+    case 36:
+      setText('チー娘', 'それと、ポストの縁に赤い繊維みたいなのが少しだけ付いてた。', 'serious');
+      break;
+
+    case 37:
       setChoices([
-        { label:'間違いでしょ', onClick:()=>{ choice3='mistake'; step=31; render(); } },
-        { label:'誰か近くにいる', onClick:()=>{ choice3='near'; step=31; render(); } },
-        { label:'捨てた方がいい', onClick:()=>{ choice3='trash'; step=31; render(); } },
+        { label:'間違いでしょ', onClick:()=>{ choice3='mistake'; step=38; render(); } },
+        { label:'誰か近くにいる', onClick:()=>{ choice3='near'; step=38; render(); } },
+        { label:'捨てた方がいい', onClick:()=>{ choice3='trash'; step=38; render(); } },
       ]);
       break;
 
-    case 31:
+    case 38:
       if(choice3 === 'mistake'){
         setText('チー娘', 'そうだよね。\nただの間違いだよね', 'soft');
       }else if(choice3 === 'near'){
@@ -988,7 +1002,7 @@ function render(){
       }
       break;
 
-    case 32:
+    case 39:
       if(choice3 === 'mistake'){
         showEnding(
           'END A',
@@ -1011,7 +1025,7 @@ function render(){
 
 function nextStep(){
   if(ended) return;
-  if(step === 7 || step === 13 || step === 21 || step === 30) return;
+  if(step === 9 || step === 15 || step === 18 || step === 27 || step === 37) return;
   step++;
   render();
 }
